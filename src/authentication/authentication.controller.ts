@@ -15,6 +15,7 @@ import { LoginDto } from './dto/login.dto';
 import { AccessTokenEntity, LoginEntity } from './entities/login.entity';
 import { RefreshAccessTokenDto } from './dto/refreshAccessToken.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 @Controller('authentication')
 @ApiTags('authentication')
 export class AuthenticationController {
@@ -36,6 +37,7 @@ export class AuthenticationController {
   @UseGuards(JwtAuthGuard)
   @Get('logout')
   @HttpCode(HttpStatus.OK)
+  @ApiOkResponse()
   async logout(@Request() req: Request): Promise<void> {
     const token: string = req.headers['authorization'].split(' ')[1];
     return await this.authService.logout(token);
@@ -48,5 +50,14 @@ export class AuthenticationController {
     @Body() { refreshToken }: RefreshAccessTokenDto,
   ): Promise<AccessTokenEntity> {
     return await this.authService.refreshAccessToken(refreshToken);
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOkResponse()
+  async resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<void> {
+    await this.authService.resetPassword(resetPasswordDto);
   }
 }

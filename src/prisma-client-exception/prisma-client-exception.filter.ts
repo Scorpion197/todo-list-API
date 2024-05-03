@@ -24,6 +24,8 @@ const errorMappings: Record<string, { status: number; message: string }> = {
     status: HttpStatus.BAD_REQUEST,
     message: 'A unique constraint would be violated',
   },
+  P2025: { status: HttpStatus.NOT_FOUND, message: 'Record not found' },
+
   P1001: {
     status: HttpStatus.SERVICE_UNAVAILABLE,
     message: 'Cannot connect to the database',

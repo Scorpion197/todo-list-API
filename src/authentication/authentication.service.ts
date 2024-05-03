@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RedisService } from 'src/redis/redis.service';
 import { CreateUserDto } from './dto/createUser.dto';
+import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { LoginDto } from './dto/login.dto';
 import { LoginEntity, AccessTokenEntity } from './entities/login.entity';
 const numberOfHashingRounds = 10;
@@ -60,6 +61,20 @@ export class AuthenticationService {
 
   async logout(token: string): Promise<void> {
     await this.redisService.blackListToken(token);
+  }
+
+  async resetPassword(resetPasswordDto: ResetPasswordDto): Promise<void> {
+    const hashedPassword = await bcrypt.hash(
+      resetPasswordDto.password,
+      numberOfHashingRounds,
+    );
+
+    await this.prismaService.user.update({
+      where: { email: resetPasswordDto.email },
+      data: {
+        password: hashedPassword,
+      },
+    });
   }
 
   async refreshAccessToken(refreshToken: string): Promise<AccessTokenEntity> {
