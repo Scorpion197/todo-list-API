@@ -6,6 +6,7 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { RedisModule } from './redis/redis.module';
+import { TodosModule } from './todos/todos.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RedisModule } from './redis/redis.module';
       isGlobal: true,
     }),
     RedisModule,
+    TodosModule,
   ],
   controllers: [AppController],
   providers: [AppService],

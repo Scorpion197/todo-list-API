@@ -16,7 +16,7 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { AccessTokenEntity, LoginEntity } from './entity/login.entity';
+import { AccessTokenEntity, LoginEntity } from './entities/login.entity';
 import { RefreshAccessTokenDto } from './dto/refreshAccessToken.dto';
 
 @Controller('authentication')

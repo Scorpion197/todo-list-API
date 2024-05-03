@@ -8,7 +8,7 @@ import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RedisService } from 'src/redis/redis.service';
-import { LoginEntity, AccessTokenEntity } from './entity/login.entity';
+import { LoginEntity, AccessTokenEntity } from './entities/login.entity';
 const numberOfHashingRounds = 10;
 
 @Injectable()
