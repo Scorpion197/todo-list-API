@@ -11,7 +11,7 @@ export class RedisService {
   }
 
   async isTokenBlacklisted(token: string): Promise<boolean> {
-    const retrievedToken = await this.redis.get(`${token}`);
+    const retrievedToken = await this.redis.get(`token:${token}`);
     return retrievedToken !== null;
   }
 }
