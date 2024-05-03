@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AuthenticationService } from './authentication.service';
-import { CreateUserDto } from './dto/register.dto';
+import { CreateUserDto } from './dto/createUser.dto';
 import { LoginDto } from './dto/login.dto';
 import { AccessTokenEntity, LoginEntity } from './entities/login.entity';
 import { RefreshAccessTokenDto } from './dto/refreshAccessToken.dto';
@@ -27,14 +27,14 @@ export class AuthenticationController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: LoginEntity })
-  async login(@Body() { email, password }: LoginDto): Promise<LoginEntity> {
-    return await this.authService.login(email, password);
+  async login(@Body() loginDto: LoginDto): Promise<LoginEntity> {
+    return await this.authService.login(loginDto);
   }
 
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() { email, password }: CreateUserDto): Promise<void> {
-    return await this.authService.create(email, password);
+  async register(@Body() createUserDto: CreateUserDto): Promise<void> {
+    return await this.authService.create(createUserDto);
   }
 
   @Post('logout')

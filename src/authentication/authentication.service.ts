@@ -8,6 +8,8 @@ import * as bcrypt from 'bcrypt';
 
 import { PrismaService } from 'src/prisma/prisma.service';
 import { RedisService } from 'src/redis/redis.service';
+import { CreateUserDto } from './dto/createUser.dto';
+import { LoginDto } from './dto/login.dto';
 import { LoginEntity, AccessTokenEntity } from './entities/login.entity';
 const numberOfHashingRounds = 10;
 
@@ -19,23 +21,30 @@ export class AuthenticationService {
     private redisService: RedisService,
   ) {}
 
-  async create(email: string, password: string): Promise<void> {
-    const hashedPassword = await bcrypt.hash(password, numberOfHashingRounds);
+  async create(createUserDto: CreateUserDto): Promise<void> {
+    const hashedPassword = await bcrypt.hash(
+      createUserDto.password,
+      numberOfHashingRounds,
+    );
 
     await this.prismaService.user.create({
       data: {
-        email: email,
+        email: createUserDto.email,
         password: hashedPassword,
       },
     });
   }
 
-  async login(email: string, password: string): Promise<LoginEntity> {
+  async login(loginDto: LoginDto): Promise<LoginEntity> {
+    const email = loginDto.email;
     const user = await this.prismaService.user.findUnique({ where: { email } });
     if (!user) {
       throw new NotFoundException('No user found with the given email');
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
