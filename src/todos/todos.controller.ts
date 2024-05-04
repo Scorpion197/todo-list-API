@@ -12,6 +12,7 @@ import {
   Param,
   Delete,
   Query,
+  Version,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { TodosService } from './todos.service';
@@ -29,6 +30,7 @@ export class TodosController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
+  @Version('1')
   @HttpCode(HttpStatus.CREATED)
   @ApiBearerAuth()
   @ApiOkResponse({ type: TodoEntity })
@@ -40,6 +42,7 @@ export class TodosController {
   //https://API_URL/todos?content=meeting&sortBy=createdAt&sortOrder=desc&cursor=456&pageSize=10
   @UseGuards(JwtAuthGuard)
   @Get()
+  @Version('1')
   @HttpCode(HttpStatus.CREATED)
   @ApiBearerAuth()
   @ApiOkResponse({ type: TodoEntity, isArray: true })
@@ -54,6 +57,7 @@ export class TodosController {
 
   @UseGuards(JwtAuthGuard)
   @Put(':id')
+  @Version('1')
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiOkResponse({ type: TodoEntity })
@@ -68,6 +72,7 @@ export class TodosController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+  @Version('1')
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(

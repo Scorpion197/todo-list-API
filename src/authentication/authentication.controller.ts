@@ -7,6 +7,7 @@ import {
   HttpStatus,
   HttpCode,
   Get,
+  Version,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthenticationService } from './authentication.service';
@@ -22,6 +23,7 @@ export class AuthenticationController {
   constructor(private readonly authService: AuthenticationService) {}
 
   @Post('login')
+  @Version('1')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: LoginEntity })
   async login(@Body() loginDto: LoginDto): Promise<LoginEntity> {
@@ -29,6 +31,7 @@ export class AuthenticationController {
   }
 
   @Post('register')
+  @Version('1')
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() createUserDto: CreateUserDto): Promise<void> {
     return await this.authService.create(createUserDto);
@@ -36,6 +39,7 @@ export class AuthenticationController {
 
   @UseGuards(JwtAuthGuard)
   @Get('logout')
+  @Version('1')
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiOkResponse()
@@ -46,6 +50,7 @@ export class AuthenticationController {
 
   @UseGuards(JwtAuthGuard)
   @Post('refresh')
+  @Version('1')
   @HttpCode(HttpStatus.OK)
   @ApiBearerAuth()
   @ApiOkResponse({ type: AccessTokenEntity })
@@ -56,6 +61,7 @@ export class AuthenticationController {
   }
 
   @Post('reset-password')
+  @Version('1')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse()
   async resetPassword(
