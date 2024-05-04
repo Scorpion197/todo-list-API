@@ -7,6 +7,7 @@ import { PrismaModule } from './prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { RedisModule } from './redis/redis.module';
 import { TodosModule } from './todos/todos.module';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
@@ -18,6 +19,12 @@ import { TodosModule } from './todos/todos.module';
     }),
     RedisModule,
     TodosModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 10,
+      },
+    ]),
   ],
   controllers: [AppController],
   providers: [AppService],
