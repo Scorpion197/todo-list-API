@@ -11,6 +11,7 @@ import {
   ParseIntPipe,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { TodosService } from './todos.service';
@@ -18,6 +19,8 @@ import { TodoEntity } from './entities/Todo.entity';
 import { CreateTodoDto } from './dto/CreateTodo.dto';
 import { UpdateTodoDto } from './dto/UpdateTodo.dto';
 import { JwtAuthGuard } from 'src/authentication/jwt-auth.guard';
+import { TodoQueryDto } from './dto/query.dto';
+import { TodoQueryEntity } from './entities/TodoList.entity';
 
 @Controller('todos')
 @ApiTags('todos')
@@ -32,13 +35,19 @@ export class TodosController {
     return await this.todosService.create(createTodoDto);
   }
 
+  // this endpoint can be queried like this:
+  //https://API_URL/todos?content=meeting&sortBy=createdAt&sortOrder=desc&cursor=456&pageSize=10
   @UseGuards(JwtAuthGuard)
   @Get()
   @HttpCode(HttpStatus.CREATED)
   @ApiOkResponse({ type: TodoEntity, isArray: true })
-  async findAll(@Request() req: Request): Promise<TodoEntity[]> {
+  async findAll(
+    @Request() req: Request,
+    @Query('pageSize') pageSize: string,
+    @Query() queryDto: TodoQueryDto,
+  ): Promise<TodoQueryEntity> {
     const userId = req['user'].userId;
-    return await this.todosService.findAll(userId);
+    return await this.todosService.findAll(userId, queryDto, pageSize);
   }
 
   @UseGuards(JwtAuthGuard)
