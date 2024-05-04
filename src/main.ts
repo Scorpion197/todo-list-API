@@ -11,9 +11,9 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const config = new DocumentBuilder()
-    .setTitle('Median')
-    .setDescription('The Median API description')
-    .setVersion('0.1')
+    .setTitle('TodoAPI')
+    .setDescription('The Todo API description')
+    .setVersion('1')
     .addBearerAuth()
     .build();
 

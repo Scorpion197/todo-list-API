@@ -8,7 +8,7 @@ import {
   HttpCode,
   Get,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthenticationService } from './authentication.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { LoginDto } from './dto/login.dto';
@@ -37,14 +37,17 @@ export class AuthenticationController {
   @UseGuards(JwtAuthGuard)
   @Get('logout')
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @ApiOkResponse()
   async logout(@Request() req: Request): Promise<void> {
     const token: string = req.headers['authorization'].split(' ')[1];
     return await this.authService.logout(token);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: AccessTokenEntity })
   async refreshAccessToken(
     @Body() { refreshToken }: RefreshAccessTokenDto,

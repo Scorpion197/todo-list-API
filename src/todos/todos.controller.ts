@@ -13,7 +13,7 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { TodosService } from './todos.service';
 import { TodoEntity } from './entities/Todo.entity';
 import { CreateTodoDto } from './dto/CreateTodo.dto';
@@ -30,6 +30,7 @@ export class TodosController {
   @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: TodoEntity })
   async create(@Body() createTodoDto: CreateTodoDto): Promise<TodoEntity> {
     return await this.todosService.create(createTodoDto);
@@ -40,6 +41,7 @@ export class TodosController {
   @UseGuards(JwtAuthGuard)
   @Get()
   @HttpCode(HttpStatus.CREATED)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: TodoEntity, isArray: true })
   async findAll(
     @Request() req: Request,
@@ -53,6 +55,7 @@ export class TodosController {
   @UseGuards(JwtAuthGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: TodoEntity })
   async update(
     @Body() updateTodoDto: UpdateTodoDto,
@@ -65,6 +68,7 @@ export class TodosController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
+  @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(
     @Request() req: Request,
