@@ -1,6 +1,31 @@
 version: '3'
 services:
-  db:
+  nest-backend:
+    container_name: nest-app
+    image: nest-api
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_DB=${REDIS_DB}
+      - REDIS_TOKEN_EXPIRATION_TIME=${REDIS_TOKEN_EXPIRATION_TIME}
+      - DATABASE=${DATABASE}
+    env_file:
+      - ./.env
+    networks:
+      - backend_network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
     image: postgres:13
     ports:
       - '5432:5432'
@@ -11,7 +36,7 @@ services:
     env_file:
       - ./.env
     networks:
-      - dbnetwork
+      - backend_network
 
   redis:
     image: redis:7.0.12-alpine
@@ -23,10 +48,10 @@ services:
     volumes:
       - cache:/var/lib/redis/
     networks:
-      - redis-network
+      - backend_network
 networks:
-  dbnetwork:
-  redis-network:
+  backend_network:
+    driver: bridge
 
 volumes:
   cache:
