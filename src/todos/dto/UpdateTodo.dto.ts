@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class UpdateTodoDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  @MinLength(6, { message: 'Minimum todo content is 6 characters' })
+  @Length(6, 100)
   content: string;
 }
