@@ -38,10 +38,10 @@ export class AuthenticationService {
 
   async login(loginDto: LoginDto): Promise<LoginEntity> {
     const email = loginDto.email;
-    const user = await this.prismaService.user.findUnique({ where: { email } });
-    if (!user) {
-      throw new NotFoundException('No user found with the given email');
-    }
+    const user = await this.prismaService.user.findUniqueOrThrow({
+      where: { email },
+    });
+
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
       user.password,
@@ -50,6 +50,7 @@ export class AuthenticationService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
+
     return {
       accessToken: this.jwtService.sign({ userId: user.id }),
       refreshToken: this.jwtService.sign(
@@ -79,13 +80,10 @@ export class AuthenticationService {
 
   async refreshAccessToken(refreshToken: string): Promise<AccessTokenEntity> {
     const { userId } = this.jwtService.verify(refreshToken);
-    const newAccessToken: string = this.jwtService.sign(
+    const newAccessToken: string = await this.jwtService.signAsync(
       { userId },
       { expiresIn: '15m' },
     );
     return { accessToken: newAccessToken };
-  }
-  catch(error: Error) {
-    throw new UnauthorizedException('Failed to refresh access token');
   }
 }
