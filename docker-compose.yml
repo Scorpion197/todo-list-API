@@ -1,8 +1,6 @@
 version: '3'
 services:
   nest-backend:
-    container_name: nest-app
-    image: nest-api
     build:
       dockerfile: Dockerfile
       context: .
@@ -49,6 +47,18 @@ services:
       - cache:/var/lib/redis/
     networks:
       - backend_network
+
+  nginx:
+    build: ./nginx
+    ports:
+      - '80:80'
+
+    depends_on:
+      - nest-backend
+    networks:
+      - backend_network
+    restart: unless-stopped
+
 networks:
   backend_network:
     driver: bridge
