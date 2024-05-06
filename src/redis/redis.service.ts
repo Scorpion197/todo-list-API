@@ -2,6 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { ConfigService } from '@nestjs/config';
+import { TodoQueryDto } from 'src/todos/dto/query.dto';
+import { TodoEntity } from 'src/todos/entities/Todo.entity';
+interface CachedTodos {
+  data: TodoEntity[];
+  nextCursor: string;
+}
 @Injectable()
 export class RedisService {
   constructor(
@@ -21,5 +27,15 @@ export class RedisService {
   async isTokenBlacklisted(token: string): Promise<boolean> {
     const retrievedToken: string = await this.redis.get(`token:${token}`);
     return retrievedToken !== null;
+  }
+
+  async cacheQuery(query: TodoQueryDto, data: CachedTodos): Promise<void> {
+    const key: string = `key-${query?.content || ''}${query?.cursor || ''}${query?.sortBy || ''}${query?.sortOrder || ''}`;
+    await this.redis.set(key, JSON.stringify(data));
+  }
+
+  async getCachedQuery(query: TodoQueryDto): Promise<CachedTodos> {
+    const key: string = `key-${query?.content || ''}${query?.cursor || ''}${query?.sortBy || ''}${query?.sortOrder || ''}`;
+    return (await this.redis.get(key)) as unknown as CachedTodos;
   }
 }

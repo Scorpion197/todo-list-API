@@ -8,6 +8,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { RedisModule } from './redis/redis.module';
 import { TodosModule } from './todos/todos.module';
 import { ThrottlerModule } from '@nestjs/throttler';
+import * as redisStore from 'cache-manager-ioredis';
+import { CacheModule } from '@nestjs/cache-manager';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [

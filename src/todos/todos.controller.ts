@@ -17,8 +17,8 @@ import {
 import { ApiOkResponse, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { TodosService } from './todos.service';
 import { TodoEntity } from './entities/Todo.entity';
-import { CreateTodoDto } from './dto/CreateTodo.dto';
-import { UpdateTodoDto } from './dto/UpdateTodo.dto';
+import { CreateTodoDto } from './dto/createTodo.dto';
+import { UpdateTodoDto } from './dto/updateTodo.dto';
 import { JwtAuthGuard } from 'src/authentication/jwt-auth.guard';
 import { TodoQueryDto } from './dto/query.dto';
 import { TodoQueryEntity } from './entities/TodoList.entity';

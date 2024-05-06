@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateTodoDto } from './dto/CreateTodo.dto';
-import { UpdateTodoDto } from './dto/UpdateTodo.dto';
+import { CreateTodoDto } from './dto/createTodo.dto';
+import { UpdateTodoDto } from './dto/updateTodo.dto';
 import { TodoQueryDto } from './dto/query.dto';
 import { TodoEntity } from './entities/Todo.entity';
 import { TodoQueryEntity } from './entities/TodoList.entity';
-import { Prisma } from '@prisma/client';
+import { RedisService } from 'src/redis/redis.service';
+
 @Injectable()
 export class TodosService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private redisService: RedisService,
+  ) {}
 
   async create(createTodoDto: CreateTodoDto): Promise<TodoEntity> {
     return await this.prismaService.todo.create({ data: createTodoDto });
@@ -19,6 +24,10 @@ export class TodosService {
     query: TodoQueryDto,
     pageSize: string,
   ): Promise<TodoQueryEntity> {
+    const data = await this.redisService.getCachedQuery(query);
+    if (data) {
+      return data;
+    }
     const numPageSize = parseInt(pageSize) || 5;
     const whereClause: Prisma.TodoWhereInput = {};
 
@@ -44,7 +53,7 @@ export class TodosService {
     if (todos.length > numPageSize) {
       nextCursor = todos.pop().id.toString(); // Pop the extra item to maintain page size
     }
-
+    await this.redisService.cacheQuery(query, { data: todos, nextCursor });
     return {
       data: todos,
       nextCursor,
