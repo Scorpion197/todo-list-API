@@ -1,10 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { CreateTodoDto } from './createTodo.dto';
+import { PartialType } from '@nestjs/mapped-types';
 
-export class UpdateTodoDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(255)
-  content: string;
-}
+export class UpdateTodoDto extends PartialType(CreateTodoDto) {}
