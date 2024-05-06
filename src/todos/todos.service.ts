@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateTodoDto } from './dto/createTodo.dto';
 import { UpdateTodoDto } from './dto/updateTodo.dto';
 import { TodoQueryDto } from './dto/query.dto';
 import { TodoEntity } from './entities/Todo.entity';
 import { TodoQueryEntity } from './entities/TodoList.entity';
-import { RedisService } from 'src/redis/redis.service';
+import { RedisService } from '../redis/redis.service';
 
 @Injectable()
 export class TodosService {
