@@ -17,4 +17,4 @@ The documentation of the API is automatically generated with swagger. You can fi
 
 ## Scaling the API
 
-I provided a `stack.yml` file to deploy the application in docker swarm and setup number of replications and a set of other configs
+I provided a `stack.yml` file to deploy the application in docker swarm mode and setup number of replications and a set of other configs.
