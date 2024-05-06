@@ -14,3 +14,7 @@ A simple todo API made with Nest.js
 ## API documentation
 
 The documentation of the API is automatically generated with swagger. You can find at `http://localhost:3000/api/v1/docs`
+
+## Scaling the API
+
+I provided a `stack.yml` file to deploy the application in docker swarm and setup number of configuration and a set of other configs
