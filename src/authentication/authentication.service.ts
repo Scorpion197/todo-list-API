@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { LoginDto } from './dto/login.dto';
 import { LoginEntity, AccessTokenEntity } from './entities/login.entity';
+import { UserEntity } from './entities/user.entity';
 const numberOfHashingRounds = 10;
 
 @Injectable()
@@ -22,18 +23,19 @@ export class AuthenticationService {
     private redisService: RedisService,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<void> {
+  async create(createUserDto: CreateUserDto): Promise<UserEntity> {
     const hashedPassword = await bcrypt.hash(
       createUserDto.password,
       numberOfHashingRounds,
     );
 
-    await this.prismaService.user.create({
+    const user = await this.prismaService.user.create({
       data: {
         email: createUserDto.email,
         password: hashedPassword,
       },
     });
+    return user;
   }
 
   async login(loginDto: LoginDto): Promise<LoginEntity> {

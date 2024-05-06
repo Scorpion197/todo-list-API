@@ -66,5 +66,32 @@ describe('AuthenticationService', () => {
       expect(result.refreshToken).toEqual('refreshToken456');
     });
   });
-  // Tests (corrected as above)
+
+  describe('create', () => {
+    it('should create a new user with a hashed password', async () => {
+      const createUserDto = {
+        email: 'test@example.com',
+        password: 'strongPassword123',
+      };
+      const expectedResult = {
+        id: 1,
+        email: 'test@example.com',
+        password: 'hashedPassword',
+      };
+
+      // Assuming the service method correctly returns a user object.
+      prismaService.user.create.mockResolvedValue(expectedResult);
+
+      const result = await service.create(createUserDto);
+
+      expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
+      expect(prismaService.user.create).toHaveBeenCalledWith({
+        data: {
+          email: 'test@example.com',
+          password: 'hashedPassword',
+        },
+      });
+      expect(result).toEqual(expectedResult);
+    });
+  });
 });

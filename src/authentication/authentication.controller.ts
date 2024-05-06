@@ -17,6 +17,7 @@ import { AccessTokenEntity, LoginEntity } from './entities/login.entity';
 import { RefreshAccessTokenDto } from './dto/refreshAccessToken.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
+import { UserEntity } from './entities/user.entity';
 @Controller('authentication')
 @ApiTags('authentication')
 export class AuthenticationController {
@@ -33,7 +34,7 @@ export class AuthenticationController {
   @Post('register')
   @Version('1')
   @HttpCode(HttpStatus.CREATED)
-  async register(@Body() createUserDto: CreateUserDto): Promise<void> {
+  async register(@Body() createUserDto: CreateUserDto): Promise<UserEntity> {
     return await this.authService.create(createUserDto);
   }
 
