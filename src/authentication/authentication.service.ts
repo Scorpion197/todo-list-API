@@ -6,8 +6,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 
-import { PrismaService } from 'src/prisma/prisma.service';
-import { RedisService } from 'src/redis/redis.service';
+import { PrismaService } from '../prisma/prisma.service';
+import { RedisService } from '../redis/redis.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { ResetPasswordDto } from './dto/resetPassword.dto';
 import { LoginDto } from './dto/login.dto';
